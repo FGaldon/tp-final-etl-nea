@@ -260,7 +260,25 @@ def agregar_variacion_interanual(filas):
     #      y calcular_variacion() ya sabe qué hacer con eso.
     #
     # Usar un dict como índice evita recorrer toda la lista por cada fila.
-    raise NotImplementedError("TODO 6: implementá agregar_variacion_interanual()")
+    por_clave = {}
+
+    for fila in filas:
+        clave = (fila["provincia"], fila["destino"])
+        por_clave.setdefault(clave, []).append(fila)
+
+    for clave, grupo in por_clave.items():
+        grupo.sort(key=lambda f: f["anio"])
+ 
+        anterior = None
+
+    for fila in grupo:
+        fila["var_interanual_pct"] = calcular_variacion(
+            fila["valor_musd"],
+            anterior,
+        )
+        anterior = fila["valor_musd"]
+
+    return filas
     # ---------------------------------------------------------------------
 
 
