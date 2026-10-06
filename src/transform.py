@@ -293,8 +293,7 @@ def agregar_ranking(filas, top_n=None):
 
     CONTRATO: modifica y devuelve la misma lista de filas.
     """
-    if top_n is None:
-        top_n = config.TOP_N
+    
 
     # TODO 7 --------------------------------------------------------------
     # Estrategia sugerida:
@@ -304,7 +303,23 @@ def agregar_ranking(filas, top_n=None):
     #      sorted(grupo, key=lambda f: f["valor_musd"], reverse=True)
     #   3. Recorré el grupo ordenado con enumerate(..., start=1) y asigná
     #      'ranking_destino' y 'es_top3' (un booleano: posición <= top_n).
-    raise NotImplementedError("TODO 7: implementá agregar_ranking()")
+    if top_n is None:
+        top_n = config.TOP_N
+
+    por_grupo = {}
+
+    for fila in filas:
+        clave = (fila["provincia"], fila["anio"])
+        por_grupo.setdefault(clave, []).append(fila)
+
+    for grupo in por_grupo.values():
+        grupo.sort(key=lambda f: f["valor_musd"], reverse=True)
+
+        for posicion, fila in enumerate(grupo, start=1):
+            fila["ranking_destino"] = posicion
+            fila["es_top3"] = posicion <= top_n
+
+    return filas
     # ---------------------------------------------------------------------
 
 
