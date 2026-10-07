@@ -366,9 +366,31 @@ def construir_indice_rubros(paquetes_rubro):
                 valor = valores[posicion]
 
                 if valor is not None:
-                    rubros[nombre] = round(valor, 2)
+                    rubros[nombre] = valor
 
-            indice[(provincia, anio)] = rubros
+            if not rubros:
+                indice[(provincia, anio)] = {
+                    "rubro_principal": None,
+                    "pp_participacion_pct": None,
+                }
+                continue
+
+            rubro_principal = max(rubros, key=rubros.get)
+            valor_principal = rubros[rubro_principal]
+            total_rubros = sum(rubros.values())
+
+            if total_rubros == 0:
+                participacion = None
+            else:
+                participacion = round(
+                    valor_principal / total_rubros * 100,
+                    2,
+                )
+
+            indice[(provincia, anio)] = {
+                "rubro_principal": rubro_principal,
+                "pp_participacion_pct": participacion,
+            }
 
     return indice
     # ---------------------------------------------------------------------
