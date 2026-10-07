@@ -85,7 +85,16 @@ def chequear_rangos(filas):
     # TODO 10 -------------------------------------------------------------
     # Pista: una comprensión de lista con la condición al final te da
     # directamente las filas fuera de rango; después mirás cuántas son.
-    raise NotImplementedError("TODO 10: implementá chequear_rangos()")
+    fuera_de_rango = [
+    f for f in filas
+        if f["valor_musd"] < 0
+        or f["valor_musd"] > config.VALOR_MAXIMO_RAZONABLE
+    ]
+
+    if fuera_de_rango:
+        return False, f"rangos: {len(fuera_de_rango)} filas fuera de rango"
+
+    return True, "rangos: todas las filas están dentro de rango"
     # ---------------------------------------------------------------------
 
 
