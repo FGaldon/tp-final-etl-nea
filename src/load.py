@@ -190,7 +190,31 @@ def construir_resumen(filas, detalle_checks):
     #   - Para provincias únicas y ordenadas: sorted({f["provincia"] for f in filas})
     #   - Para la fecha: datetime.now().strftime("%Y-%m-%d %H:%M")
     #   - Podés agregar más claves si querés (suma puntos en la rúbrica).
-    raise NotImplementedError("TODO 11: implementá construir_resumen()")
+    valores = [f["valor_musd"] for f in filas]
+    anios = [f["anio"] for f in filas]
+    provincias = sorted({f["provincia"] for f in filas})
+
+    resumen = {
+        "dataset": "Exportaciones del NEA por destino",
+        "fuente": "datos.gob.ar / INDEC - API de Series de Tiempo",
+        "unidad": "millones de dólares FOB",
+        "generado": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "filas": len(filas),
+        "columnas": len(COLUMNAS),
+        "periodo": {
+            "desde": min(anios),
+            "hasta": max(anios),
+        },
+        "provincias": provincias,
+        "valor_musd": {
+            "minimo": min(valores),
+            "maximo": max(valores),
+            "promedio": round(sum(valores) / len(valores), 2),
+        },
+        "quality_checks": detalle_checks,
+    }
+
+    return resumen
     # ---------------------------------------------------------------------
 
 
