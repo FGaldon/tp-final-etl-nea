@@ -226,7 +226,16 @@ def guardar_resumen(resumen, carpeta=None, nombre=None):
     """
     # TODO 12a ------------------------------------------------------------
     # Muy parecido a guardar_csv(), pero con json.dump().
-    raise NotImplementedError("TODO 12a: implementá guardar_resumen()")
+    carpeta = carpeta or config.DIR_PROCESSED
+    nombre = nombre or config.ARCHIVO_SALIDA_JSON
+    os.makedirs(carpeta, exist_ok=True)
+    ruta = os.path.join(carpeta, nombre)
+
+    with open(ruta, "w", encoding="utf-8") as f:
+        json.dump(resumen, f, ensure_ascii=False, indent=2)
+
+    logging.info("  JSON: %s", ruta)
+    return ruta
     # ---------------------------------------------------------------------
 
 
