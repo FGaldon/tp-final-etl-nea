@@ -412,22 +412,17 @@ def unir_con_rubros(filas, indice_rubros):
     # 'rubro_principal' y 'pp_participacion_pct'. Si no hay match, None.
     for fila in filas:
         clave = (fila["provincia"], fila["anio"])
-        rubros = indice_rubros.get(clave, {})
+        rubros = indice_rubros.get(clave)
 
-        if not rubros:
+        if  rubros is None:
             fila["rubro_principal"] = None
             fila["pp_participacion_pct"] = None
             continue
 
-        rubro_principal = max(rubros, key=rubros.get)
-        valor_rubro = rubros[rubro_principal]
-
-        fila["rubro_principal"] = rubro_principal
-        fila["pp_participacion_pct"] = calcular_participacion(
-            valor_rubro,
-            fila["total_provincia_musd"],
-        )
-
+       
+        fila["rubro_principal"] = rubros["rubro_principal"]
+        fila["pp_participacion_pct"] = rubros["pp_participacion_pct"]
+           
     return filas
     # ---------------------------------------------------------------------
 
